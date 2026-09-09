@@ -1,0 +1,12 @@
+.DS_Store
+.venv/
+__pycache__/
+
+# 에이전트 런타임 상태.
+.omc/
+.claude/
+
+# 사이트 배포에 필요하지 않은 것들 — 로컬에만 둔다.
+INTERNAL.md
+design/
+tools/
