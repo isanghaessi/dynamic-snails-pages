@@ -125,6 +125,12 @@ function renderDeclaredSprites() {
 		});
 	});
 
+	document.querySelectorAll('[data-ham]').forEach((element) => {
+		renderHam(element, {
+			pixelSize: element.dataset.px ? Number(element.dataset.px) : null,
+		});
+	});
+
 	document.querySelectorAll('[data-shell-mark]').forEach((element) => {
 		renderShellMark(element, {
 			pixelSize: element.dataset.px ? Number(element.dataset.px) : null,

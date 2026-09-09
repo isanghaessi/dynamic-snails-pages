@@ -691,6 +691,12 @@ section.tight {
 	--walker-sole-front: 33px;
 }
 
+/* 배고픈 카드의 트랙은 앱에서 12pt 더 높다 — 밥 무리가 머리 위에 있을 자리를
+   내주기 위해서다. 여기 트랙은 앱의 4분의 3 크기라 9px 만 더한다. */
+.track.hungry {
+	height: 55px;
+}
+
 .track .rail {
 	position: absolute;
 	left: 0;
@@ -742,6 +748,51 @@ section.tight {
 .track .goal .shell-mark {
 	--px: 3px;
 	opacity: 0.85;
+}
+
+/* 배고픈 달팽이 머리 위로 떠오르는 밥 세 덩이 — 잠든 만화의 z 를 밥으로 바꾼 것.
+   뒤로 갈수록 흐려지는 것이 움직임을 대신한다(라이브 액티비티는 뷰를 저장해
+   두므로 앱에서도 이것들은 움직이지 않는다). 코앞이 아니라 머리 위인 이유는
+   하루가 저물수록 목표 마커가 코앞 자리로 다가오기 때문이다.
+
+   위치는 앱의 hamTrail 과 같은 비율이다 — 달팽이 폭(36px)의 0.18·0.44·0.70 만큼
+   오른쪽으로, 머리 위에서 3px 씩 떠오른다. */
+.track .ham-trail {
+	position: absolute;
+	left: 50%;
+	bottom: 30px;
+	width: 0;
+}
+
+.track .ham-trail .ham {
+	position: absolute;
+}
+
+/* 배고픈 동안 START/GOAL 범례 자리를 대신하는 한 줄. 앱과 같은 자리, 같은 민트,
+   앞에 밥 한 덩이. 카드를 누르면 앱이 열리고, 그 열림이 곧 한 끼다. */
+.lock-card .feed-invite {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	font-family: var(--pixel);
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	color: var(--slime);
+	margin-top: 9px;
+}
+
+/* 다이나믹 아일랜드의 컴팩트 표시 — 밥은 달팽이를 덮지 않고 머리 오른쪽 위에
+   비켜 뜬다. 앱도 스프라이트 위에 겹치지 않고 슬롯을 넓혀 자리를 낸다. */
+.snail-meal {
+	position: relative;
+	display: block;
+}
+
+.snail-meal .ham {
+	position: absolute;
+	top: -3px;
+	right: -9px;
 }
 
 .track .dust {
@@ -1193,7 +1244,8 @@ section.tight {
 /* 스프라이트 프레임과 잉크. snail.js 가 만드는 구조에 대응한다. */
 .snail .frame,
 .shell-mark .frame,
-.icon-mark .frame {
+.icon-mark .frame,
+.ham .frame {
 	position: absolute;
 	inset: 0;
 	display: block;
@@ -1223,6 +1275,40 @@ section.tight {
 
 .ink-eye {
 	background: #fff;
+}
+
+/* 밥 — 7×8 격자. 달팽이가 12×8 이라 상자 크기만 따로 잡는다. */
+.ham {
+	position: relative;
+	display: block;
+	image-rendering: pixelated;
+	--px: 2px;
+	width: calc(var(--px) * 7);
+	height: calc(var(--px) * 8);
+}
+
+.ham i {
+	position: absolute;
+	width: calc(var(--px) + 0.5px);
+	height: calc(var(--px) + 0.5px);
+	display: block;
+}
+
+/* 앱이 고정해 둔 네 색 그대로. 포크만 양피지색이고 나머지는 붉은 세 단계다. */
+.ink-fork {
+	background: var(--parchment);
+}
+
+.ink-ham-light {
+	background: #ff9b9b;
+}
+
+.ink-ham {
+	background: #e2504e;
+}
+
+.ink-ham-shade {
+	background: #a83230;
 }
 
 /* 목표 선택 버튼 — 꾸미기 색 견본과 달리 글자가 들어간다. */
@@ -1358,6 +1444,120 @@ section.tight {
 		0 0, calc(50% - 33px) 0, calc(50% - 33px) 4px, calc(50% + 33px) 4px,
 		calc(50% + 33px) 0, 100% 0, 100% 100%, 0 100%
 	);
+}
+
+/* ── 애플워치 액자 ──────────────────────────────────────
+   맥북 액자와 같은 생각이다. 워치 화면 한 장만 두면 어느 기기의 무엇인지 캡션
+   말고는 말해주는 것이 없으므로, 같은 검은 베젤로 몸통을 만들고 오른쪽 옆면에
+   크라운과 버튼을, 위아래에 밴드가 물리는 자리를 붙인다.
+
+   폭은 화면이 208px 로 앉도록 잡았다 — 캡처가 416x496(시리즈 10 46mm 의 실제
+   화소)이라 레티나에서 화소가 1:1 로 떨어지고, 픽셀 달팽이가 뭉개지지 않는다. */
+.watch {
+	position: relative;
+	width: 100%;
+	max-width: 224px;
+	/* 아래쪽 밴드가 10px 삐져나오므로 캡션이 그 위로 올라타지 않게 그만큼 비운다. */
+	margin: 0 auto 14px;
+}
+
+/* 밴드가 시작되는 자리. 몸통 위아래로 조금만 나온다 — 밴드를 다 그리면 사진이
+   아니라 제품 렌더가 되고, 옆의 맥북과 무게가 맞지 않는다. */
+.watch::before,
+.watch::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 58%;
+	height: 14px;
+	background: #08080a;
+	opacity: 0.9;
+}
+
+.watch::before {
+	top: -10px;
+	border-radius: 7px 7px 0 0;
+}
+
+.watch::after {
+	bottom: -10px;
+	border-radius: 0 0 7px 7px;
+}
+
+.watch-body {
+	position: relative;
+	background: #08080a;
+	padding: 8px;
+	/* 기기 목업만 반경 0 규칙에서 빠지는 것은 .phone 과 같다. 안쪽 반경은
+	   바깥에서 베젤 두께(8px)를 뺀 값이라 모서리에서도 굵기가 일정하다. */
+	border-radius: 42px;
+	box-shadow: 0 24px 50px rgba(24, 22, 19, 0.22), inset 0 0 0 1.5px rgba(255, 255, 255, 0.09);
+}
+
+/* 크라운과 옆 버튼 — 오른쪽 옆면에서 튀어나온 만큼만. */
+.watch-crown,
+.watch-side {
+	position: absolute;
+	right: -3px;
+	width: 4px;
+	background: #08080a;
+	box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.watch-crown {
+	top: 26%;
+	height: 16px;
+	border-radius: 0 2px 2px 0;
+}
+
+.watch-side {
+	top: 47%;
+	height: 22px;
+	border-radius: 0 2px 2px 0;
+}
+
+/* 바탕은 흰색이다 — 캡처의 배경화면이 흰색이라, 화면 가장자리에서 이어진다. */
+.watch-screen {
+	aspect-ratio: 416 / 496;
+	background: #fff;
+	border-radius: 34px;
+	overflow: hidden;
+}
+
+/* 화면을 통째로 채운다. 모따기는 액자 안에서는 방해만 되므로 끈다 —
+   `.shot img` 가 뒤에서 clip-path 를 걸므로 선택자를 한 단 더 준다. */
+.shot .watch-screen img {
+	width: 100%;
+	height: auto;
+	clip-path: none;
+}
+
+/* 맥북과 워치를 한 줄에 세운다. 단 하나가 508px 뿐이라 둘 다 제 최대 폭으로는
+   설 수 없으므로, 맥북이 남는 폭을 갖고 워치는 제 폭을 지킨다.
+
+   둘의 크기 비는 실물과 맞지 않는다 — 실제 워치는 맥북 화면 한 귀퉁이만 하다.
+   맥북 조각을 제 비율보다 크게 넣은 것과 같은 이유로, 제 비율로 줄이면 워치
+   카드 안의 픽셀 달팽이가 뭉개져 읽히지 않는다. */
+.shot-pair {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 22px;
+	margin: 0 0 26px;
+}
+
+.shot-pair .shot {
+	margin: 0;
+}
+
+.shot-pair .shot.mac {
+	flex: 1 1 240px;
+	max-width: 286px;
+}
+
+.shot-pair .shot.watch-shot {
+	flex: 0 0 200px;
 }
 
 /* 화면 전체가 아니라 잘라낸 조각 — 기기 액자 대신 같은 회색 테두리로 통일한다.

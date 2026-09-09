@@ -161,6 +161,30 @@ const SnailPalette = {
 	defaultShellIndex: 1,
 };
 
+/* 밥 — 배고픈 달팽이 머리 위로 떠오르는 햄 한 덩이. 7×8 격자에 포크가 대각선으로
+ * 꽂혀 있다. 원본은 PangleKit/HamSprite.swift 의 HamArt.
+ *
+ * 색은 달팽이 프리셋을 따라가지 않는다. 앱이 고정해 둔 이유가 그대로 여기서도
+ * 유효하다 — 빨강은 달팽이 팔레트(민트~모래)가 닿지 않는 유일한 색이라, 밥이
+ * 스물네 가지 몸 색 어디에도 섞이지 않는다.
+ *
+ * 문자 의미: F = 포크, L = 햄의 밝은 윗면, M = 몸통, D = 그늘진 아랫면.
+ */
+const HamArt = {
+	columns: 7,
+	rows: 8,
+	art: [
+		'.....FF',
+		'....FF.',
+		'...FF..',
+		'.LLLLL.',
+		'LLLMMMM',
+		'MMMMMMM',
+		'MMMMMDD',
+		'.MMDDD.',
+	],
+};
+
 const INK_CLASS = {
 	m: 'ink-mark',
 	b: 'ink-body',
@@ -168,6 +192,10 @@ const INK_CLASS = {
 	s: 'ink-shell',
 	S: 'ink-highlight',
 	w: 'ink-eye',
+	F: 'ink-fork',
+	L: 'ink-ham-light',
+	M: 'ink-ham',
+	D: 'ink-ham-shade',
 };
 
 /* 아트 한 장을 픽셀 <i> 묶음으로 만든다. hasShell 이 false 면 껍데기 픽셀은 버린다. */
@@ -282,6 +310,25 @@ function renderIconMark(element, options) {
 	}
 
 	element.appendChild(buildFrame(SnailArt.iconMark, true));
+
+	return element;
+}
+
+/* 밥 한 덩이 — 배고픈 카드의 밥 생각 무리와 '터치하여 밥 주기' 앞 글머리에 쓴다.
+ *
+ * 껍데기 마크처럼 팔레트를 받지 않는다. 색이 아트에 박혀 있다. */
+function renderHam(element, options) {
+	const settings = Object.assign({ pixelSize: null }, options || {});
+
+	element.classList.add('ham');
+	element.textContent = '';
+	element.setAttribute('aria-hidden', 'true');
+
+	if (settings.pixelSize) {
+		element.style.setProperty('--px', `${settings.pixelSize}px`);
+	}
+
+	element.appendChild(buildFrame(HamArt.art, true));
 
 	return element;
 }
